@@ -1,0 +1,459 @@
+
+¤O
+
+yzpm.proto";
+C_LoginResByUser_1000
+tel (	Rtel
+yzm (	Ryzm">
+S_LoginResByUser_1001%
+usersRes (2	.UsersResRusersRes"<
+C_LoginResByPhone_1002
+tel (	Rtel
+pwd (	Rpwd"`
+S_LoginResByPhone_1003%
+usersRes (2	.UsersResRusersRes
+retObj (2.RetObjRretObj"N
+C_ChangePwd_1004
+tel (	Rtel
+yzm (	Ryzm
+newPwd (	RnewPwd"3
+S_ChangePwd_1005
+retObj (2.RetObjRretObj"­
+C_SaveUserInfo_1006
+id (Rid
+ssp (	Rssp
+examYear (	RexamYear"
+examPreScore (	RexamPreScore
+role (	Rrole 
+examSubject	 (	RexamSubject"]
+S_SaveUserInfo_1007
+retObj (2.RetObjRretObj%
+usersRes (2	.UsersResRusersRes"8
+C_GetSchoolStoreUpResList_1008
+userID (RuserID"g
+S_GetSchoolStoreUpResList_1009E
+schoolStoreUpResList (2.SchoolStoreUpResRschoolStoreUpResList"<
+"C_GetDisciplineStoreUpResList_1020
+userID (RuserID"u
+"S_GetDisciplineStoreUpResList_1021O
+disciplineStoreUpResLis (2.DisciplineStoreUpResRdisciplineStoreUpResLis"9
+C_GetSchoolContrastResList_1022
+userID (RuserID"k
+S_GetSchoolContrastResList_1023H
+schoolContrastResList (2.SchoolContrastResRschoolContrastResList"=
+#C_GetDisciplineContrastResList_1024
+userID (RuserID"s
+#S_GetDisciplineContrastResList_1025L
+disciplineContrastRes (2.DisciplineContrastResRdisciplineContrastRes"K
+C_SaveAssessment_1026
+id (Rid"
+examPreScore (	RexamPreScore"8
+S_SaveAssessment_1027
+retObj (2.RetObjRretObj"G
+C_SaveUserInfo_1028
+id (Rid 
+examSubject (	RexamSubject"6
+S_SaveUserInfo_1029
+retObj (2.RetObjRretObj"<
+RetObj
+resCode (RresCode
+resInfo (RresInfo"â
+UsersRes
+id (Rid
+tel (	Rtel
+picPath1 (	RpicPath1
+pwd (	Rpwd
+ssp (	Rssp
+examYear (	RexamYear"
+examPreScore (	RexamPreScore
+role (	Rrole 
+examSubject	 (	RexamSubject"
+SchoolContrastRes
+schoolId (RschoolId
+
+schoolName (	R
+schoolName
+addTime (	RaddTime
+userID (	RuserID"w
+DisciplineContrastRes
+zylId (RzylId
+zyName (	RzyName
+addTime (	RaddTime
+userID (	RuserID"t
+SchoolStoreUpRes
+id (Rid
+
+schoolName (	R
+schoolName
+addTime (	RaddTime
+userID (	RuserID"€
+DisciplineStoreUpRes
+id (Rid&
+disciplineName (	RdisciplineName
+addTime (	RaddTime
+userID (	RuserID"6
+C_GetSchoolInfoById_2000
+schoolId (RschoolId"G
+S_GetSchoolInfoById_2001+
+
+schoolInfo (2.SchoolInfoR
+schoolInfo"g
+C_GetSchoolAdmitInfo_2002
+schoolId (RschoolId
+year (	Ryear
+province (	Rprovince"W
+S_GetSchoolAdmitInfo_2003:
+schoolAdmitInfo (2.SchoolAdmitInfoRschoolAdmitInfo"y
+C_GetZyAdmitInfo_2004
+schoolId (RschoolId
+year (	Ryear
+province (	Rprovince
+kelei (	Rkelei"G
+S_GetZyAdmitInfo_2005.
+zyAdmitInfo (2.ZyAdmitInfoRzyAdmitInfo"
+C_GetPlanRecruit_2006
+schoolId (RschoolId
+year (	Ryear
+province (	Rprovince
+kelei (	Rkelei
+pici (	Rpici"G
+S_GetPlanRecruit_2007.
+planRecruit (2.PlanRecruitRplanRecruit"0
+C_GetXkyqInfo_2008
+schoolId (RschoolId";
+S_GetXkyqInfo_2009%
+xkyqInfo (2	.XkyqInfoRxkyqInfo"0
+C_GetYxszInfo_2010
+schoolId (RschoolId";
+S_GetYxszInfo_2011%
+yxszInfo (2	.YxszInfoRyxszInfo"0
+C_GetZsjzInfo_2012
+schoolId (RschoolId";
+S_GetZsjzInfo_2013%
+zsjzInfo (2	.ZsjzInfoRzsjzInfo"œ
+
+SchoolInfo
+id (Rid
+tel (	Rtel
+name (	Rname
+logoPath (	RlogoPath
+type (	Rtype
+level (	Rlevel
+province (	Rprovince
+email (	Remail
+
+schoolInfo	 (	R
+schoolInfo"
+schoolMeddia
+ (	RschoolMeddia
+	fengguang (	R	fengguang"Ê
+ZyInfo
+id (Rid
+name (	Rname
+type (	Rtype
+level (	Rlevel
+	yearLimit (	R	yearLimit
+studyLev (	RstudyLev 
+requirement (	Rrequirement
+zyCode (	RzyCode"›
+SchoolAdmitInfo
+id (Rid
+schoolId (RschoolId
+zsnf (	Rzsnf
+kelei (	Rkelei
+yylb (	Ryylb
+lqpc (	Rlqpc
+higScore (	RhigScore
+AvgScore (	RAvgScore
+lowScore	 (	RlowScore
+lowSeat
+ (	RlowSeat
+	planCount (	R	planCount"Ã
+ZyAdmitInfo
+id (Rid
+zyId (RzyId
+zyName (	RzyName
+zsnf (	Rzsnf
+kelei (	Rkelei
+lqpc (	Rlqpc
+higScore (	RhigScore
+AvgScore (	RAvgScore
+lowScore	 (	RlowScore
+lowSeat
+ (	RlowSeat
+diff (	Rdiff
+	planCount (	R	planCount
+schoolId (RschoolId"Á
+PlanRecruit
+id (Rid
+schoolId (RschoolId
+zyId (RzyId
+zcode (	Rzcode
+zyName (	RzyName
+	planCount (	R	planCount
+zsnf (	Rzsnf
+pici (	Rpici"¨
+XkyqInfo
+id (Rid
+schoolId (RschoolId
+zyId (RzyId
+zyName (	RzyName
+	planCount (	R	planCount
+zsnf (	Rzsnf
+pici (	Rpici"I
+YxszInfo
+xyName (RxyName%
+xkyqInfo (2	.XkyqInfoRxkyqInfo"ˆ
+ZsjzInfo
+id (Rid
+schoolId (RschoolId
+title (Rtitle 
+publishDate (	RpublishDate
+content (	Rcontent"º
+C_GetZntjInfoList_3000
+kelei (	Rkelei
+score (Rscore
+weishu (Rweishu
+province (	Rprovince
+type (	Rtype
+pici (	Rpici
+cengci (	Rcengci
+
+startScore (R
+startScore
+endScore	 (RendScore
+page
+ (Rpage
+limit (Rlimit
+sortFile (	RsortFile"l
+S_GetZntjInfoList_3001%
+zntjInfo (2	.ZntjInfoRzntjInfo+
+
+pagingInfo (2.PagingInfoR
+pagingInfo"™
+C_GetSeachSchoolList_3002
+
+schoolName (	R
+schoolName
+province (	Rprovince
+type (	Rtype
+pici (	Rpici
+cengci (	Rcengci
+
+startScore (R
+startScore
+endScore (RendScore
+page (Rpage
+limit	 (Rlimit
+sortFile
+ (	RsortFile"x
+S_GetSeachSchoolList_3003.
+seachSchool (2.SeachSchoolRseachSchool+
+
+pagingInfo (2.PagingInfoR
+pagingInfo"˜
+C_GetSeachScoreList_3004
+
+schoolName (	R
+schoolName
+province (	Rprovince
+type (	Rtype
+pici (	Rpici
+cengci (	Rcengci
+
+startScore (R
+startScore
+endScore (RendScore
+page (Rpage
+limit	 (Rlimit
+sortFile
+ (	RsortFile"t
+S_GetSeachScoreList_3005+
+
+seachScore (2.SeachScoreR
+seachScore+
+
+pagingInfo (2.PagingInfoR
+pagingInfo"‹
+C_GetSeachSKYXList_3006
+province (	Rprovince
+kelei (	Rkelei
+years (	Ryears
+page (Rpage
+limit (Rlimit"p
+S_GetSeachSKYXList_3007(
+	seachSKYX (2
+.SeachSKYXR	seachSKYX+
+
+pagingInfo (2.PagingInfoR
+pagingInfo"…
+C_GetSeachYYPMList_3008
+name (	Rname
+xueli (	Rxueli
+type (	Rtype
+cengci (	Rcengci
+
+startScore (R
+startScore
+endScore (RendScore
+page (Rpage
+limit (Rlimit
+diqu	 (	Rdiqu
+sortFile
+ (	RsortFile"p
+S_GetSeachYYPMList_3009(
+	SeachYYPM (2
+.SeachYYPMR	SeachYYPM+
+
+pagingInfo (2.PagingInfoR
+pagingInfo" 
+C_GetZydqList_3010
+zYName (	RzYName
+pici (	Rpici
+type (	Rtype 
+schoolIsAll (RschoolIsAll
+page (Rpage
+limit (Rlimit"\
+S_GetZydqList_3011
+xkml (2.XkmlRxkml+
+
+pagingInfo (2.PagingInfoR
+pagingInfo"Ú
+C_GetSeachFSXZYList_3012
+kelei (	Rkelei
+zyName (	RzyName
+province (	Rprovince
+type (	Rtype
+pici (	Rpici
+xueli (	Rxueli
+kemu (	Rkemu 
+schoolIsAll (RschoolIsAll
+
+startScore	 (R
+startScore
+endScore
+ (RendScore
+page (Rpage
+limit (Rlimit
+sortFile (	RsortFile"e
+S_GetSeachFSXZYList_3013
+fSXZY (2.FSXZYRfSXZY+
+
+pagingInfo (2.PagingInfoR
+pagingInfo"¿
+C_GetZyzdxList_3014
+zyName (	RzyName
+province (	Rprovince
+type (	Rtype
+xueli (	Rxueli
+pici (	Rpici
+kemu (	Rkemu 
+schoolIsAll (RschoolIsAll
+
+startScore (R
+startScore
+endScore	 (RendScore
+page
+ (Rpage
+limit (Rlimit
+sortFile (	RsortFile"`
+S_GetZyzdxList_3015
+zyzdx (2.ZyzdxRzyzdx+
+
+pagingInfo	 (2.PagingInfoR
+pagingInfo"Ö
+ZntjInfo
+id (Rid
+logoPath (	RlogoPath
+name (	Rname
+lqgl (	Rlqgl
+lqpc (	Rlqpc
+tdx (	Rtdx
+rmzy (	Rrmzy
+xxpm (	Rxxpm
+type	 (	Rtype
+level
+ (	Rlevel"˜
+
+PagingInfo
+rowcount (Rrowcount
+	pageCount (R	pageCount
+pageNo (RpageNo
+pageSize (RpageSize
+	startLimt (R	startLimt"Å
+SeachSchool
+id (Rid
+name (	Rname
+logoPath (	RlogoPath
+lqgl (	Rlqgl
+lqpc (	Rlqpc
+tdx (	Rtdx
+rmzy (	Rrmzy
+type (	Rtype
+level	 (	Rlevel"¾
+
+SeachScore
+id (Rid
+name (	Rname
+logoPath (	RlogoPath
+type (	Rtype
+level (	Rlevel
+stFsx1 (	RstFsx1
+ndFsx2 (	RndFsx2
+rdFsx3 (	RrdFsx3"…
+	SeachSKYX
+lqyears (	Rlqyears
+province (	Rprovince
+kelei (	Rkelei
+pici (	Rpici
+zdScroe (RzdScroe"¹
+	SeachYYPM
+id (Rid
+name (	Rname
+logoPath (	RlogoPath
+type (	Rtype
+level (	Rlevel
+tlgxSort (	RtlgxSort"
+provinceSort (	RprovinceSort
+qsSort (	RqsSort
+wslSort	 (	RwslSort
+xyhSort
+ (	RxyhSort
+hot (	Rhot
+tdx (	Rtdx
+diqu (	Rdiqu"M
+Xkml
+id (Rid
+XKmlName (	RXKmlName
+yjxk (2.YjxkRyjxk"n
+Yjxk
+id (Rid
+yjxkName (	RyjxkName
+zyInfo (2.ZyInfoRzyInfo
+xkyq (2.XkyqRxkyq"2
+Xkyq
+id (Rid
+xkyqName (	RxkyqName"Å
+FSXZY
+id (Rid
+zyName (	RzyName
+zyTeSe (	RzyTeSe
+zyLqgl (	RzyLqgl
+lqpc (	Rlqpc
+province (	Rprovince
+xkyq (	Rxkyq 
+stYearLine1 (	RstYearLine1"
+Zyzdx
+id (Rid
+name (	Rname
+logoPath (	RlogoPath
+type (	Rtype
+level (	Rlevel 
+stYearLine1 (	RstYearLine1
+zyLqgl (	RzyLqgl
+zyName (	RzyName
+zyLev	 (	RzyLev
+zyId
+ (RzyId
+xkyq (	RxkyqB
+com.msgBYZPMPbproto3

@@ -1,0 +1,1125 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.msg";
+option java_outer_classname = "YZPM";
+
+//用户相关信息-------------------------------
+//用户个人信息数据结构
+
+
+//登录-使用手机登录--请求
+message C_LoginResByPhone_1000 {
+   string accountName = 1;  //手机号
+   string pw = 2;  //密码
+   string year = 3;  //志愿年份
+}
+
+//登录-使用手机登录--响应
+message S_LoginResByPhone_1001 {
+  UsersRes usersRes = 1;
+  MsgResult result = 2;
+}
+
+//登录-使用Token登录--请求
+message C_LoginResByToken_1010 {
+   string token = 1;
+   int32 loginType = 2; //该token使用的登录方式. 0:普通账号登录
+}
+
+//登录-使用Token登录--响应
+message S_LoginResByToken_1011 {
+  UsersRes usersRes = 1;
+  MsgResult result = 2;
+}
+
+
+//获取验证吗
+message C_getSmsCode_1006{
+	string phoneNumber = 1; //手机号码
+}
+message S_getSmsCode_1007{
+	MsgResult result = 1;
+}
+
+//获取邮箱验证
+message C_getMailVerifyCode_1008{
+	string emailAddress = 1; //邮箱地址
+}
+message S_getMailVerifyCode_1009{
+	MsgResult result = 1;
+}
+
+//返回消息处理结果
+message MsgResult{
+	int32 errorCode = 1; //失败消息代码 -1: 成功,  >=0:代表对应的错误信息, 以后查表获取对应消息名
+	string errorMsg = 2; //失败消息[暂时由服务器发送]
+}
+
+
+
+message PagingInfo {
+   fixed64  rowcount = 1;    //记录总数
+   fixed64  pageCount = 2;   //总页数
+   fixed64  pageNo = 3;     //当前页码
+   fixed64  pageSize =4;     //每页显示条数
+   fixed64  startLimt =5;     //起始行
+
+}
+
+//-----------------------------------------------------------------------------------------
+// 团队管理
+
+
+//个人信息 返回对象
+message UsersRes {
+   fixed64 id = 1;          //id
+   string tel = 2;          //手机号,登录账号
+   string pwd = 3;          //密码
+   string name = 4;          //老师名称
+   int32 role = 5;          //老师类型: 运营=4，专家=3，审核员=2，管理员=1，
+   string token = 6;          //用户登录token
+   int64 tokenExpireDate = 7;          //token过期时间
+      int32 isDelete = 8;          //1: 已经删除; 0: 没有删除
+   string examYear = 9;          //志愿年份
+}
+
+
+
+//查询团队教师信息
+message C_GetTeacherInfoByPage_2000 {
+  string tel = 1;        //手机号
+  string name = 2;        //教师名
+  int32 type = 3;        //教师类型
+  int32 page     =4;  //查询页码
+  int32 limit     =5;  //每页显示条数
+  int64 teacherId = 6;   //需要用这个UsersRes.id查询当前用户【老师】被授权查看的客单 ; 默认-1;
+}
+
+message S_GetTeacherInfoByPage_2001 {
+   MsgResult result = 1; //返回消息体
+   repeated UsersRes usersRes = 2;
+   PagingInfo pagingInfo = 3;//分页对象
+}
+
+//更新团队教师
+message C_UpdateTeacherInfo_2002 {
+     UsersRes usersRes = 1;
+     int32 opType = 2;       //操作类型：  1： 创建新member  2：更新信息  3： 删除信息
+}
+
+message S_UpdateTeacherInfo_2003 {
+   MsgResult result = 1; //返回消息体
+   UsersRes usersRes = 2;
+}
+
+message C_GetAllTeacherInfo_2004 {
+}
+
+message S_GetAllTeacherInfo_2005 {
+   MsgResult result = 1; //返回消息体
+   repeated UsersRes usersRes = 2;
+}
+
+//修改志愿年份
+message C_ChangeExamYear_2006 {
+       fixed64 id = 1;          //id
+       string examYear = 2;          //志愿年份
+}
+
+message S_ChangeExamYear_2007 {
+   MsgResult result = 1; //返回消息体
+   UsersRes usersRes = 2;
+}
+
+//获取有效年份
+message C_GetExamYear_2008 {
+
+}
+
+message S_GetExamYear_2009 {
+   MsgResult result = 1; //返回消息体
+   repeated string examYears = 2;
+}
+
+//-----------------------------------------------------------------------------------------
+// 客单管理
+
+//客单信息
+message OrderInfo {
+   fixed64 id = 1;          //客单唯一id
+   string name = 2;          //客户名==和ClientInfo中名对应
+   string tel = 3;          //客户手机号==和ClientInfo中对应
+   int32 status = 4;          //状态:0:待处理（等待创建方案）1:已处理（等待审核方案）2:已审核（等待用户确认）3:已完成（用户已确认
+   int64 creationDate = 5;          //创建时间
+   string creatorName = 6;          //创建老师名
+   string assignedTeacher = 7;          //分配负责的老师
+   repeated fixed64 authorTeacherIds = 8;          //授权可查看的老师Ids [id,id,id]
+   string province = 9;          //省份 ==和ClientInfo中名对应
+   string examYear = 10;          //高考年份==和ClientInfo中名对应
+   //repeated string favoredMajorGroupList = 11;          //喜欢的专业list [用,区分专业id] == 针对每个客单
+   //repeated string unfavoredGroupMajorList = 12;          //不喜欢的专业组id lit == 针对每个客单
+   //repeated string neutralGroupMajorList = 13;          //不喜欢的专业组id lit == 针对每个客单
+   int32 formNum = 14;          //志愿表数量
+
+	//ClientInfo clientInfo = 1;//客单对应用户信息
+	int32 isDelete = 15;          //1: 已经删除; 0: 没有删除
+
+    string examScore = 16;          //高考成绩
+    string examRank = 17;       //高考位次
+    repeated PhysicLimitationInfo limitationInfos = 18; //
+
+    ClientInfo clientInfo = 19;//客单对应用户信息
+
+    repeated Pref  majorPref = 20 ;//专业喜好信息, 按年份区分
+}
+
+//客单对应的 客户信息
+message ClientInfo {
+    string tel = 1;          //Tab1_手机号
+    string password = 2;          //Tab1_客户密码
+    string examYear = 3;          //Tab1_高考年份
+    int64 userExpireDate = 4;          //Tab1_用户登录失效时间 == 有效期
+
+    string name = 5;          //Tab1_学生姓名
+    string gender = 6;          //Tab1_性别
+
+    string province = 7;          //Tab1_省份
+    string birthPlace = 8;//Tab1_ 户籍所在地
+
+    string highSchool = 9;          //Tab1_所在学校
+    repeated string examSubject = 10;          //Tab1_考试科目  物理|生物
+
+    int32 studentType = 11;  //Tab1_应届生类型 1: 城镇应届   2: 农村应届     3: 城镇往届  4: 农村往届
+    int32 medicalHist = 12;  //Tab1_病史  1: 无既往病史  2:  有既往病史
+    string height =13;//Tab1_身高
+    string weight = 14;//Tab1_体重
+    string bmi = 15;//Tab1_BMI
+
+    string examEstScoreMin = 16;          //Tab1_高考预估分数_低
+    string examEstScoreMax = 17;          //Tab1_高考预估分数_最高
+    string examEstRankMin = 18;          //Tab1_高考预估位次_低  不需要输入, 服务器计算
+    string examEstRankMax = 19;          //Tab1_高考预估位次_最高 不需要输入, 服务器计算
+
+    string eng1StScore = 20;          //Tab1_第一次英语成绩  ==口语成绩
+    string examScore = 21;          //Tab1_高考成绩
+    string examRank =22;//Tab1_高考位次
+
+    string singleSubjScore = 23;          // 不再使用 单科成绩 包括6个成绩  none 不再使用
+    string physExam = 24;          // 不再使用 体检限报 none 不再使用
+    string preSubmission = 25;          // 不再使用  提前批报考意向   不再使用
+
+    string chineseSingle = 26;//Tab1_单科成绩 语文
+    string mathSingle = 27;//Tab1_单科成绩 数学
+    string englishSingle = 28;//Tab1_单科成绩 英语
+    string physicSingle = 29;//Tab1_单科成绩 物理
+    string chemistrySingle = 30;//Tab1_单科成绩 化学
+    string politicsSingle = 31;//Tab1_单科成绩  政治
+    string historySingle = 32;//Tab1_单科成绩 历史
+    string geologySingle =33;//Tab1_单科成绩 地理
+    string biologySingle =34;//Tab1_单科成绩 生物
+
+    ////Tab1_
+    string creatorTeacher = 35;//Tab1_ 报考老师
+    string assistantTeacher = 36;//Tab1_ 助理老师
+
+
+
+    //Tab2_
+    string companyF = 101;          //Tab2_父亲所在单位  == 公司+职务
+    string telF = 102;          //Tab2_手机号 ==联系方式
+    string jobF = 103;          //职务  不再使用, 合并到companyF
+    string socialF = 104;          //Tab2_社会关系
+    string companyM = 105;          //Tab2_母亲所在单位  == 公司+职务
+    string telM = 106;          //Tab2_母亲手机号   ==联系方式
+    string jobM = 107;          // 不再使用 母亲职务    不再使用, 合并到 companyM
+    string socialM = 108;          //Tab2_母亲社会关系
+    string nameF = 109; //Tab2_ 父亲姓名
+    string nameM = 110; //Tab2_ 母亲姓名
+    string parentPreferenct = 111; //Tab2_ 父母专业倾向
+
+    //强基计划意向
+    string uniPlan = 120;          //Tab2_院校   强基计划
+    string uniMajor = 121;          //Tab2_强基专业   强基计划
+    string uniComment = 122;          //Tab2_备注   强基计划
+    string uniSubmission = 123;          //Tab2_是否入围  强基计划   : 3个选项: 是/否/待办
+
+    //Tab2_提前批/综评意向
+    repeated int32 preAdminPref = 130; //Tab2_ 报考意向  [提前批]
+    string preAdminUnis = 131; //Tab2_ 目标院校  [提前批]
+    string preAdminMajors = 132; //Tab2_ 目标专业  [提前批]
+    string preAdminPhysExam = 133; //Tab2_ 体检是否合格  [提前批]
+    string preAdminComments  = 134;//Tab2_ 提前批/综评备注  [提前批]
+
+    //Tab2_中外合作/港澳意向
+    repeated string overseasPref = 140; //Tab2_ 报考意向  [中外合作]
+    int32 overseasTuition = 141; //Tab2_ 学费接受程度  [中外合作]
+    repeated string overseasDuration = 142; //Tab2_ 学制  [中外合作]
+    string overseasComments  = 143; //Tab2_ 中外合作/港澳备注  [中外合作]
+
+
+    //Tab2_普通批意向
+    string adminPrefRegion = 150; //Tab2_ 地域倾向  [普通批意向]
+    string adminPrefMajor1 = 151; //Tab2_ 优选专业  [普通批意向]
+    string adminPrefMajor2 = 152; //Tab2_ 次选专业  [普通批意向]
+    string adminExcluMajor = 153; //Tab2_ 排斥专业  [普通批意向]
+    string adminComments  = 154;//Tab2_ 普通批备注  [普通批意向]
+
+    string studentIntro = 160;          // 不再使用 考生情况评估（100个字符）
+
+
+
+    //Tab3_重要沟通记录
+    repeated importantRecord importRecs = 200;    //Tab3_ 重要沟通记录
+
+
+
+    //Tab4_ 历次成绩
+    repeated scoreHistItem scoreHist = 300;          //Tab4_ 历次成绩 [用,区分]
+
+    //不再使用 , 用favoredMajorCls1List ,unfavoredMajorCls1List
+    repeated fixed64 favoredMajorList = 301;          //不再使用  喜欢的专业id list  deprecate
+    repeated fixed64 unfavoredMajorList = 302;          //不再使用 不喜欢的专业id lit deprecate
+    repeated string favoredMajorNameList = 303;          //不再使用 喜欢的专业名字 list deprecate
+    repeated string unfavoredMajorNameList = 304;          //不再使用 不喜欢的专业名字 lit deprecate
+
+
+    ////Tab5_ 关注专业
+    repeated Major1stClsInfo favoredMajorCls1List =400; //喜欢的专业信息list,
+    repeated Major1stClsInfo unfavoredMajorCls1List =401; //不喜欢的专业信息list
+
+
+    //Tab_ 权限分配
+    repeated fixed64 authorTeacherIds = 500;          //授权可查看的老师Ids [id,id,id]
+
+
+    //Tab_ 体检限报
+    repeated PhysicLimitationInfo limitationInfos = 600; //体检限报
+    int32 hasSelectPhysicLimitation = 601;   //是否在界面 选择过体检限报  0:未选择过    1: 选择正常     2: 存在体检限报, ;
+
+
+}
+
+//重要沟通记录
+message  importantRecord{
+    int64 recDate = 1;          //日期
+    int32 commType = 2;   //沟通类型,   1: 面谈  2: 电话   3: 微信  4: 腾讯会议
+    int32 commTarget = 3;//  沟通对象,  1: 父亲  2: 母亲  3: 考生   4: 考生家庭（家长+孩子）  5: 其他（请输入）
+    string commTargetOthers = 4;// 沟通对象 , 其他（请输入）
+
+    string content = 5;  //沟通内容/问题
+    string majorAndUni= 6;//推荐了专业/院校
+    string background = 7;  //背景记录
+    int64 nxDate = 8;          //预计下次沟通时间
+}
+
+
+message  scoreHistItem{
+	string examName = 1;// 考试名
+	string chinese = 2;//语文
+	string math = 3;//数学
+	string english = 4;//英语
+	string physic = 5;//物理
+	string chemistry = 6;//化学
+	string politics = 7;// 政治
+	string history = 8;//历史
+	string geology =9;//地理
+	string biology = 10;//生物
+	string totalScore =11;//总分
+	string clsRank = 12;//班级排名
+	string schoolRank = 13;//校排名
+	string distRank = 14;//区排名
+	string targetScore =15;//高考定位
+	int64 exameDate = 16;          //考试时间
+    string comment =17;//备注
+}
+
+//专业分类信息 第1大类
+message Major1stClsInfo {
+	repeated Major2ndClsInfo major2ndClsInfo = 1;
+	string  name = 2;  //大类名
+}
+//专业第2子类
+message Major2ndClsInfo {
+	repeated  Major3rdClsInfo major3rdClsInfo = 1;
+	string  name = 2;  //2类名
+}
+//专业第3子类
+message Major3rdClsInfo {
+	fixed64 id = 1;    //专业信息id
+	string  name = 2;  //专业名
+}
+
+
+//体检分类信息 第1大类
+message PhysicLimitation1stClsInfo {
+	repeated PhysicLimitation2ndClsInfo limit2ndClsInfo = 1;
+	string  name = 2;  //大类名
+}
+//体检第2子类
+message PhysicLimitation2ndClsInfo {
+	repeated  PhysicLimitationInfo limit3rdClsInfo = 1;
+	string  name = 2;  //2类名
+}
+message PhysicLimitationInfo {
+   fixed64 id = 1;          //id
+   string title = 2;          //lvl1 菜单
+   string title2 = 3;          //lvl2菜单
+   string type = 4;          //类别.为实际选择后出现在限报中的，可以多选，多选的每个值用；分割
+   string content = 5;          //详细内容.右侧文本区域出现
+}
+
+//专业喜好
+message Pref {
+   string examYear = 1;          //年份
+   repeated string favoredMajorGroupList = 2;          //喜欢的专业list [用,区分专业id] == 针对每个客单
+   repeated string unfavoredGroupMajorList = 3;          //不喜欢的专业组id lit == 针对每个客单
+   repeated string neutralGroupMajorList = 4;          //不喜欢的专业组id lit == 针对每个客单
+}
+
+//查询客单信息/  查询志愿填报界面
+message C_GetOrderInfoByPage_3000 {
+  string tel = 1;        //客户手机号  &&//授权可查看的教师名; 服务器按教师名查询，需要先找对应教师的id，再查OderInfo表
+  string province = 3;  //省份
+  int32 status = 4;   //状态   0:待处理（等待创建方案）1:已处理（等待审核方案）2:已审核（等待用户确认）3:已完成（用户已确认   -1:无状态
+  string year = 5;   //高考年份
+  string clientName = 6;//客户名
+  int32 page     =7;  //查询页码
+  int32 limit     =8;  //每页显示条数
+  int64 teacherId = 9;   //志愿填报界面，需要用这个UsersRes.id查询当前用户【老师】被授权查看的客单 ; 默认-1;
+  int32 physicLimitation= 10;   //体检限报选项,  0: 所有   1: 正常  2: 存在限报 ;
+  int32 incluDeleted     = 11;  //是否包含 删除的数据  1:包含删除的, 0:不包含删除的
+}
+
+message S_GetOrderInfoByPage_3001 {
+   MsgResult result = 1; //返回消息体
+   repeated OrderInfo orderInfo = 2;
+   PagingInfo pagingInfo = 3;//分页对象
+}
+
+//创建客单信息
+message C_CreateOrderInfo_3002 {
+
+   int64  teacherId = 1;  //当前登录老师的 UsersRes.id  // OrderInfo orderInfo = 1;    //
+   ClientInfo clientInfo = 2;//客单对应用户信息
+}
+
+message S_CreateOrderInfo_3003 {
+   MsgResult result = 1; //返回消息体
+}
+
+//更新客单信息   - 修改授权可以查看的老师、 修改客单状态
+message C_UpdateOrderInfo_3004 {
+   OrderInfo orderInfo = 1;  //
+}
+
+message S_UpdateOrderInfo_3005 {
+   MsgResult result = 1; //返回消息体
+}
+
+
+//更新客户信息
+message C_UpdateClientInfo_3006 {
+   ClientInfo clientInfo = 1;//客单对应用户信息 ; 服务器中需要同时更新ClientInfo和OrderInfo
+}
+
+message S_UpdateClientInfo_3007 {
+   MsgResult result = 1; //返回消息体
+}
+
+//查询客户信息
+message C_GetClientInfo_3008 {
+  string tel = 1;        //客单对应客户的注册手机号
+}
+
+message S_GetClientInfo_3009 {
+   MsgResult result = 1; //返回消息体
+    ClientInfo clientInfo = 2;
+}
+
+
+//分配客单 给指定老师
+message C_AssignOrderToTeacher_3010 {
+  repeated fixed64 orderId = 1;          //客单唯一id
+  fixed64 toTeacherId = 2;          //分配给老师id
+}
+
+message S_AssignOrderToTeacher_3011 {
+   MsgResult result = 1; //返回消息体
+}
+
+
+//删除客单信息
+message C_DeleteOrderInfo_3012 {
+   fixed64 id = 1;          //客单唯一id
+}
+
+message S_DeleteOrderInfo_3013 {
+   MsgResult result = 1; //返回消息体
+}
+
+//恢复客单信息
+message C_RecoverOrderInfo_3014 {
+   fixed64 id = 1;          //客单唯一id
+}
+
+message S_RecoverOrderInfo_3015 {
+   MsgResult result = 1; //返回消息体
+}
+
+
+
+//查询三级专业信息
+message C_GetMajorCls_3100 {
+
+}
+
+message S_GetMajorCls_3101 {
+   MsgResult result = 1; //返回消息体
+	repeated Major1stClsInfo major1stClsInfo = 2;
+
+}
+
+//自动获取 高考位次
+message C_GetRankByScore_3102 {
+    int32  score = 1;  //高考分数
+    string examYear = 2;//年份
+}
+
+message S_GetRankByScore_3103 {
+    MsgResult result = 1; //返回消息体
+	int32  score = 2;  //位次
+}
+
+
+//查询专业限报信息
+message C_GetPhysicLimitation_3104 {
+
+}
+
+message S_GetPhysicLimitation_3105 {
+   MsgResult result = 1; //返回消息体
+   repeated PhysicLimitation1stClsInfo limitation1stClsInfo = 2;
+}
+
+
+
+//-----------------------------------------------------------------------------------------
+// 院校池
+
+//专业组信息
+message UniMajorGroupInfo {
+	repeated UniMajorInfo majors= 1;
+	int32 groupStates = 2; //专业组 客户操作状态:  0: 无; 1:客户新增; 2:客户删除
+	repeated fixed64 templateIds = 3;          //专业对应的模板id数组
+}
+
+
+message UniMajorInfo {
+   fixed64 id = 1;          //id
+   string uniMajorCode = 2;          //院校专业组代码
+   int32 pici = 3;          //批次: 1: 本科A,2:本科B, 3: 提前批本A, 4:提前批本B   5: 专科批次
+   string schoolName = 4;          //院校名称
+   int32 schoolLvl1 = 5;          //双一流,
+   int32 schoolLvl2 = 6;          //985; 用1表示 正确
+   int32 schoolLvl3 = 7;          //211 用1表示
+   string schoolType = 8;          //院校类型 综合, 理工、综合、师范、医药
+   string province = 9;          //省
+   string city = 10;          //市
+   string belongDep = 11;          //隶属
+   string admissionRule = 12;          //录取规则
+   string schoolRank = 13;          //排名
+   string studentNum22Plan = 14;          //22计划数 = 组内求和
+   string subjectRequirement = 15;          //科目要求
+   string studentNum22Admit = 16;          //22录取数 = 组内求和
+   string scoreFor22 = 17;          //22组分数
+   string rankFor22 = 18;          //22组位次
+   string studentNum21Plan = 19;          //21年计划数 = 组内求和
+   string studentNum21Admit = 20;          //21录取数 = 组内求和
+   string scoreFor21 = 21;          //21组分数
+   string rankFor21 = 22;          //21组位次
+   string studentNum20Plan = 23;          //20年计划数 = 组内求和
+   string studentNum20Admit = 24;          //20录取数 = 组内求和
+   string scoreFor20 = 25;          //20组分数
+   string rankFor20 = 26;          //20组位次
+   string majorCode = 27;          //专业代码
+   string majorName = 28;          //专业名称
+   string majorComments = 29;          //专业备注
+   string majorOtherInfo = 30;          //专业其他信息
+   string requireLang = 31;          //外语语种
+   string requireInterview = 32;          //是否口试
+   string majorDuration = 33;          //学制
+   string majorTuition = 34;          //收费标准
+   string major22Plan = 35;          //22年计划数
+   string major22Admin = 36;          //22录取数
+   string major22LowScore = 37;          //22年低
+   string major22LowRank = 38;          //22年低位次
+   string major21Plan = 39;          //21年计划数
+   string major21Admin = 40;          //21录取数
+   string major21LowScore = 41;          //21年低
+   string major21LowRank = 42;          //21年低位次
+   string major20Plan = 43;          //20年计划数
+   string major20Admin = 44;          //20录取数
+   string major20LowScore = 45;          //20年低
+   string major20LowRank = 46;          //20年低位次
+   repeated fixed64 majorClsIds = 47;          //专业类表 ids [id,id,id]
+   repeated string majorIcon = 48;          //保存icon 图片
+
+   string major22HScore = 49;          //22年高分
+   string major22HRank = 50;          //22年高位次
+   string major22AvgScore = 51;          //22年平均分
+   string major22AvgRank = 52;          //22年平均位次
+
+   string major21HScore = 53;          //21年高分
+   string major21HRank = 54;          //21年高位次
+   string major21AvgScore = 55;          //21年平均分
+   string major21AvgRank = 56;          //21年平均位次
+
+   string major20HScore = 57;          //20年高分
+   string major20HRank = 58;          //20年高位次
+   string major20AvgScore = 59;          //20年平均分
+   string major20AvgRank = 60;          //20年平均位次
+
+   string studentNum23Plan = 61;          //23计划数 = 组内求和
+   string major23Plan = 62;          //23年计划数
+
+      repeated string limitationInfos = 63;          //体检限报信息(a),(b)
+      int32 englishScore = 64;          //英语成绩
+      int32 mathScore = 65;          //数学成绩
+
+      repeated string limitedMajorNames = 66;          // 被限制的专业字符名
+      repeated int32 limitedMajorColor = 67;          //被限制的专业字符 颜色, 2:红色,  3:黄色
+    string examYear = 68;//年份
+    string  heightLimit = 69;//身高限制
+
+    repeated string majorNameDetails = 70;          //专业类表 中 专业名 [id,id,id]
+
+
+    string scoreFor22_nv = 71;          //22组分数 女子
+    string rankFor22_nv = 72;          //22组位次 女子
+    string major22LowScore_nv = 73;          //22年低 女子
+    string major22LowRank_nv = 74;          //22年低位次 女子
+    int32 hasGenderScore = 75;          //是否区分 男女分数 0: 不区分  1:区分男女
+
+    int32 isZhongWai = 76;          //是否中外合作;  用1表示  正
+    int32 isBenSuo = 77;          //是否本硕; 用1表示 正确
+
+    string baoYanLv = 78;          //保研率
+    string shengXueLv = 79;          //升学率
+
+   repeated fixed64 majorGroupClsIds = 80;          //专业类表 ids [id,id,id], 所有专业组内的专业id
+   repeated string majorGroupMajorName = 81;          //所有专业组内的 专业名
+}
+
+//过去专业信息
+message MajorInfoYear {
+   fixed64 id = 1;          //id
+   string uniMajorCode = 2;          //院校专业组代码
+   int32 pici = 3;          //批次: 1: 本科A,2:本科B, 3: 提前批本A, 4:提前批本B
+   string schoolName = 4;          //院校名称
+   string subjectRequirement = 5;          //科目要求
+   string scoreFor22 = 6;          //22组分数
+   string rankFor22 = 7;          //22组位次
+   string majorCode = 8;          //专业代码
+   string majorName = 9;          //专业名称
+   string majorComments = 10;          //专业备注
+   string requireLang = 11;          //外语语种
+   string requireInterview = 12;          //是否口试
+   string majorDuration = 13;          //学制
+   string majorTuition = 14;          //收费标准
+   string major22Plan = 15;          //22年计划数
+   string major22Admin = 16;          //22录取数
+   string major22LowScore = 17;          //22年低
+   string major22LowRank = 18;          //22年低位次
+   string major22HScore = 19;          //22年高分
+   string major22HRank = 20;          //22年高位次
+   string major22AvgScore = 21;          //22年平分
+   string major22AvgRank = 22;          //22年平位次
+   string piciName = 23;          //计划批次
+}
+
+message IconMajorInfo {
+   fixed64 id = 1;          //id
+   string uniMajorCode = 2;          //院校专业组代码
+   string schoolName = 3;          //院校名称
+   string majorCode = 4;          //专业代码
+   string majorName = 5;          //专业名称
+   string cls1 = 6;          //第四轮学科评估
+   string cls2 = 7;          //硕士点
+   string cls3 = 8;          //双一流专业
+   string cls4 = 9;          //卓越2.0计划
+   string cls5 = 10;          //双万计划
+   string cls6 = 11;          //重点学科
+   string cls7 = 12;          //特色学科
+   string cls8 = 13;          //专业限制
+}
+
+//查询院校池信息
+message C_GetUniMajorInfoByPage_4000 {
+  fixed64 orderId = 1;        //0：不带客单信息进入；  >=0表示： 通过客单信息， 从客单查询界面进入， 查询院校信息
+  int32 pici = 2; //批次: 1: 本科A,2:本科B, 3: 提前批本A, 4:提前批本B
+  repeated string  province = 3;//省份
+  repeated string schoolType = 4;//院校类型： 综合, 理工、综合、师范、医药
+  int32 is985 = 5; //1:选择985  0： 未选 -1:全部
+  int32 is211 = 6; //1:选择211  0： 未选
+  int32 is1stcls = 7; //1:选择双一流 0： 未选
+  repeated string shoolNames = 8; //搜索学校名
+  repeated string majorNames =9;//搜索专业名
+
+  int32 minScore = 10;//位次区间 最低位次
+  int32 maxScore = 11;//位次区间 最高位次
+
+
+  int32 page     =12;  //查询页码
+  int32 limit     =13;  //每页显示条数
+
+  repeated string majorNames2 =14;//搜索2级专业名
+  string year = 15;// 查询年份
+
+    int32 isZhongWai = 16;          //是否中外合作;  1:选择  0： 未选   -1:全部
+    int32 isBenSuo = 17;          //是否本硕; 1:选择  0： 未选   -1:全部
+}
+
+message S_GetUniMajorInfoByPage_4001 {
+   MsgResult result = 1; //返回消息体
+   repeated UniMajorGroupInfo uniMajorGroupInfo = 2;
+   PagingInfo pagingInfo = 3;//分页对象
+   ClientInfo clientInfo = 4;//如果是通过客单进入， 客单对应用户信息
+   OrderInfo orderInfo = 5;  //
+   int32 pici = 6; //批次: 1: 本科A,2:本科B, 3: 提前批本A, 4:提前批本B
+
+}
+
+
+
+message C_UpdateMajorPreference_4002 {
+	fixed64 orderId = 1;  //只有通过客单信息 进入的才能修改专业喜好
+	string uniMajorGroupId = 2;//具体专业组 code
+	int32  fromState = 3; //原来状态  0： 中立  1： 喜欢 2：不喜欢
+	int32 toState =4;//改成新状态
+	string year = 5;// 年份
+}
+
+
+message S_UpdateMajorPreference_4003 {
+	MsgResult result = 1; //返回消息体
+    //OrderInfo orderInfo = 2;  //
+}
+
+
+message C_GetAllMajorsOfUni_4004 {
+	string schoolName = 1;  //学校名字
+	int32 pici = 2; //批次: 1: 本科A,2:本科B, 3: 提前批本A, 4:提前批本B
+	string year = 3;//当前年份
+}
+
+
+message S_GetAllMajorsOfUni_4005 {
+	MsgResult result = 1; //返回消息体
+	repeated string latest3Year = 2;//最近3年依次为: 2022, 2021,2020
+    repeated MajorInfoYear majorInfoYear1 = 3;  //最近1年的信息 2022年
+    repeated MajorInfoYear majorInfoYear2 = 4;  //最近2年 2021年
+    repeated MajorInfoYear majorInfoYear3 = 5;  //最近3年
+}
+
+
+message C_GetMajorsOfUniByIcon_4006 {
+	string schoolName = 1;  //学校名字
+	string majorIconId = 2; //点击的图标的icon id
+}
+
+
+message S_GetMajorsOfUniByIcon_4007 {
+	MsgResult result = 1; //返回消息体
+    repeated IconMajorInfo iconMajorInfos = 3;  //最近1年的信息 2022年
+
+}
+
+
+//-----------------------------------------------------------------------------------------
+// 志愿
+
+message FormInfo {
+   fixed64 id = 1;          //志愿表唯一id
+   //fixed64 orderId = 2;          //关联的客单id
+   int64 lastUpdateDate = 3;          //最后编辑时间
+   string formName = 4;          //志愿表名
+   repeated string examSubject = 5;          //科目
+   string rank = 6;          //位次
+   string examScore = 7;          //分数
+   string creator = 8;          //创建人
+   //string formDetail = 9;          //志愿详情 maj1_HistDBID,maj2__HistDBID|maj1__HistDBID,maj2__HistDBID
+  // string selectedMajorId = 10;          //已经选择的majorids =  id,id,id
+   int32 pici = 11;          //批次: 1: 本科A,2:本科B, 3: 提前批本A, 4:提前批本B
+
+	//FormDetailInfo detail = 12;// 专业组信息
+
+	   int32 isDelete = 12;          //1: 已经删除; 0: 没有删除
+       int32 status = 13;          //状态:0:未锁定  1:锁定
+       fixed64 lockerId  =14;    //锁定form的用户id
+       int32  lockerRole = 15;   //锁定form的用户 角色类型
+
+        string examYear = 16;          //志愿年份
+}
+
+message FormDetailInfo {
+	repeated UniMajorGroupInfo groups = 1; //专业组
+	repeated fixed64 selectedMajorIds = 2; //在志愿表中当前专业组中, 被选中的专业唯一id
+}
+
+
+
+//查询志愿信息
+message C_GetFormInfoByPage_5000 {
+  fixed64 orderId = 1;        //通过客单信息 查询志愿信息
+  int32 page     =2;  //查询页码
+  int32 limit     =3;  //每页显示条数
+   int64 teacherId = 4;   //需要用这个UsersRes.id查询当前用户【老师】被授权查看的客单 ; 默认-1;
+  int32 incluDeleted     =5;  //是否包含 删除的数据  1:包含删除的, 0:不包含删除的
+}
+
+message S_GetFormInfoByPage_5001 {
+   MsgResult result = 1; //返回消息体
+   repeated FormInfo formInfo = 2;
+   PagingInfo pagingInfo = 3;//分页对象
+}
+
+
+//创建 新志愿
+message C_CreateFormInfo_5002 {
+  int64  teacherId = 1;  //当前登录老师的 UsersRes.id  // OrderInfo orderInfo = 1;    //
+  fixed64 orderId = 2;        //通过客单信息 查询志愿信息
+  string formName = 3;// 表单名  //FormInfo formInfo = 3;      //服务 添加信息时候， 需要把MajorId转成MajorHistDB——id
+  FormDetailInfo detail = 4;// 专业组信息
+  int32 pici = 5;          //批次: 1: 本科A,2:本科B, 3: 提前批本A, 4:提前批本B
+
+  fixed64 lockedFormId = 6;          //志愿表唯一id, 如果是因为志愿表锁定, 重新生成志愿, 需要输入当前被锁定志愿的formId
+   string examYear = 7;          //志愿年份
+}
+
+message S_CreateFormInfo_5003 {
+   MsgResult result = 1; //返回消息体
+   FormInfo formInfo = 2; //志愿表信息
+}
+
+//更新志愿表信息, 比如志愿表改名;  修改志愿表中志愿顺序; 填报的志愿等
+message C_UpdateFormInfo_5004 {
+  fixed64 formId = 1;        //
+  string formName = 2;// 表单名
+  FormDetailInfo detail = 3;// 专业组信息
+  int64  teacherId = 4;  //当前登录老师的 UsersRes.id  // OrderInfo orderInfo = 1;    //
+     string examYear = 5;          //志愿年份
+}
+
+message S_UpdateFormInfo_5005 {
+   MsgResult result = 1; //返回消息体
+   //repeated FormInfo formInfo = 2;
+}
+
+
+//获取志愿详情
+message C_GetFormInfoDetail_5006 {
+  fixed64 formId = 1;        //
+  int64  teacherId = 4;  //
+}
+
+message S_GetFormInfoDetail_5007 {
+   MsgResult result = 1; //返回消息体
+  FormInfo formInfo = 2;
+  FormDetailInfo detail = 3;// 专业组信息
+}
+
+
+//删除志愿表
+message C_DeleteFormInfo_5008 {
+  fixed64 formId = 1;        //
+}
+
+message S_DeleteFormInfo_5009 {
+   MsgResult result = 1; //返回消息体
+}
+
+
+//锁定志愿表
+message C_LockFormInfo_5010 {
+  fixed64 formId = 1;        //
+  int64  teacherId = 2;  //当前登录老师的 UsersRes.id
+  int32 status = 3;          //状态:0:未锁定  1:锁定
+}
+
+message S_LockFormInfo_5011 {
+   MsgResult result = 1; //返回消息体
+}
+
+//获取批次对应 志愿信息
+message C_GetFormInfoByPici_5012 {
+  fixed64 orderId = 1;        //通过客单信息 查询志愿信息
+  int64 teacherId = 2;   //需要用这个UsersRes.id查询当前用户【老师】被授权查看的客单 ; 默认-1;
+  int32 pici = 3;   //批次: 1: 本科A,2:本科B, 3: 提前批本A, 4:提前批本B
+}
+
+message S_GetFormInfoByPici_5013 {
+   MsgResult result = 1; //返回消息体
+   repeated FormInfo formInfo = 2;
+}
+
+
+//恢复志愿表
+message C_RecoverFormInfo_5014 {
+  fixed64 formId = 1;        //
+}
+
+message S_RecoverFormInfo_5015 {
+   MsgResult result = 1; //返回消息体
+}
+
+
+//另存志愿表信息,
+message C_SaveAsFormInfo_5016{
+  fixed64 formId = 1;        //当前操作的志愿id
+  string formName = 2;// 新表单名
+  FormDetailInfo detail = 3;// 专业组信息
+  int64  teacherId = 4;  //当前登录老师的 UsersRes.id  // OrderInfo orderInfo = 1;    //
+  string examYear = 5;          //志愿年份
+}
+
+message S_SaveAsFormInfo_5017 {
+   MsgResult result = 1; //返回消息体
+   FormInfo formInfo = 2; //志愿表信息
+}
+
+
+//-----------------------------------------------------------------------------------------
+//志愿模板
+
+// 志愿模板
+message TemplateInfo {
+   fixed64 id = 1;          //志愿表唯一id
+   int64 lastUpdateDate = 2;          //最后编辑时间
+   string templateName = 3;          //模板名 不能重名
+   string creatorName = 4;          //创建人
+   repeated fixed64  authorTeacherIds = 5;          //授权可查看的老师Ids [(id),(id),(id)]
+   int32 isPublic = 6;          //1: 公开; 0: 没有公开
+   string examYear = 7;          //志愿年份
+   //string formDetail = 8;          //志愿详情 maj1_HistDBID,maj2__HistDBID|maj1__HistDBID,maj2__HistDBID
+   //string selectedMajorId = 9;          //已经选择的majorids =  id,id,id
+   //repeated UniMajorGroupInfo groups = 8; //专业组
+   //repeated fixed64 selectedMajorIds = 9; //在志愿表中当前专业组中, 被选中的专业唯一id
+
+   int32 pici = 8;          //批次: 1: 本科A,2:本科B, 3: 提前批本A, 4:提前批本B
+   int32 isDelete = 9;          //1: 已经删除; 0: 没有删除
+   int64 creatorId = 10; //创建人 id
+
+   repeated Major1stClsInfo favoredMajorCls1List =11; //模板相关的 专业信息list,
+}
+
+message TemplateDetailInfo {
+	repeated UniMajorGroupInfo groups = 1; //专业组
+	repeated fixed64 selectedMajorIds = 2; //在志愿表中当前专业组中, 被选中的专业唯一id
+}
+
+
+
+//查询模板
+message C_GetTemplateInfoByPage_6000 {
+  int64 teacherId = 1;   //需要用这个UsersRes.id
+  int32 page     =2;  //查询页码
+  int32 limit     =3;  //每页显示条数
+  string templateName = 4;// 按模板名查询
+  int32 pici = 5;   //批次: 0: 选择所有,  1: 本科A,2:本科B, 3: 提前批本A, 4:提前批本B
+  string year = 6;// 查询年份
+  int32 additionType = 7;   //给指定模板 或者  指定志愿表 查询可使用 模板:    0: 默认  1: 根据指定模板Id查询  2:根据指定志愿表id查询
+  fixed64 additionId = 8;   //给指定模板 或者  指定志愿表 查询
+}
+
+message S_GetTemplateInfoByPage_6001 {
+   MsgResult result = 1; //返回消息体
+   repeated TemplateInfo templateInfo = 2;
+   PagingInfo pagingInfo = 3;//分页对象
+}
+
+
+
+//获取模板详情: 用于使用模板时候 获取模板的详细信息
+message C_GetTemplateInfoDetail_6002 {
+  fixed64 templateId = 1;        //
+  fixed64 orderId = 2;        //0：不带客单信息进入；  >=0表示： 通过客单信息， 从客单查询界面进入， 查询院校信息
+}
+
+message S_GetTemplateInfoDetail_6003 {
+   MsgResult result = 1; //返回消息体
+  TemplateInfo templateInfo = 2;
+  TemplateDetailInfo detail = 3;// 专业组信息
+}
+
+
+//获取模板详情: 用于使用模板时候 获取模板的详细信息, 结合院校池筛选条件
+message C_GetTemplateInfoDetailByFilter_6004 {
+  fixed64 templateId = 1;        //
+  fixed64 orderId = 2;        //0：不带客单信息进入；  >=0表示： 通过客单信息， 从客单查询界面进入， 查询院校信息
+
+    int32 pici = 3; //批次: 1: 本科A,2:本科B, 3: 提前批本A, 4:提前批本B
+    repeated string  province = 4;//省份
+    repeated string schoolType = 5;//院校类型： 综合, 理工、综合、师范、医药
+    int32 is985 = 6; //1:选择985  0： 未选 -1:全部
+    int32 is211 = 7; //1:选择211  0： 未选
+    int32 is1stcls = 8; //1:选择双一流 0： 未选
+    repeated string shoolNames = 9; //搜索学校名
+    repeated string majorNames =10;//搜索专业名
+
+    int32 minScore = 11;//位次区间 最低位次
+    int32 maxScore = 12;//位次区间 最高位次
+
+    repeated string majorNames2 =13;//搜索2级专业名
+    string year = 14;// 查询年份
+
+    int32 isZhongWai = 15;          //是否中外合作;  1:选择  0： 未选   -1:全部
+    int32 isBenSuo = 16;          //是否本硕; 1:选择  0： 未选   -1:全部
+}
+
+message S_GetTemplateInfoDetailByFilter_6005 {
+   MsgResult result = 1; //返回消息体
+  TemplateInfo templateInfo = 2;
+  TemplateDetailInfo detail = 3;// 专业组信息
+}
+
+
+//分配模板 给指定老师
+message C_AssignTemplateToTeacher_6010 {
+  fixed64 templateId = 1;          //template唯一id
+  repeated fixed64 toTeacherId = 2;          //分配给老师id
+}
+
+message S_AssignTemplateToTeacher_6011 {
+   MsgResult result = 1; //返回消息体
+}
+
+//更新Templat的 是否公开
+message C_ChangeTemplateStatus_6012 {
+  fixed64 templateId = 1;          //template唯一id
+  int32   isPublic     =2;  //1: 公开; 0: 没有公开
+}
+
+message S_ChangeTemplateStatus_6013 {
+   MsgResult result = 1; //返回消息体
+}
+
+
+
+//创建 新模板
+message C_CreateTemplateInfo_6100 {
+  int64  teacherId = 1;  //当前登录老师的 UsersRes.id
+  string templateName = 2;// 模板名
+  int32 pici = 3;      //批次: 1: 本科A,2:本科B, 3: 提前批本A, 4:提前批本B
+
+  string examYear = 4;          //志愿年份
+
+  TemplateDetailInfo detail = 5;// 专业组信息
+
+  int32   isPublic     = 6;  //1: 公开; 0: 没有公开
+  repeated fixed64 toTeacherId = 7;          //分配给老师id
+
+  repeated Major1stClsInfo favoredMajorCls1List =8; //模板相关的 专业信息list,
+}
+
+
+message S_CreateTemplateInfo_6101 {
+   MsgResult result = 1; //返回消息体
+   TemplateInfo templateInfo = 2; //模板信息
+}
+
+
+//更新模板信息
+message C_UpdateTemplateInfo_6102 {
+  fixed64 templateId = 1;        //
+  string templateName = 2;// 模板名
+  TemplateDetailInfo detail = 3;// 专业组信息
+
+  repeated Major1stClsInfo favoredMajorCls1List =4; //模板相关的 专业信息list,
+}
+
+message S_UpdateTemplateInfo_6103 {
+   MsgResult result = 1; //返回消息体
+}
+
+
+
+//删除模板
+message C_DeleteTemplateInfo_6104 {
+  fixed64 templateId = 1;        //
+}
+
+message S_DeleteTemplateInfo_6105 {
+   MsgResult result = 1; //返回消息体
+}
+
+
+//获取模板详情: 用于使用模板时候 获取模板的详细信息, 结合院校池筛选条件
+message C_GetTemplateInfoDetailByFilterForUse_6106 {
+  fixed64 templateId = 1;        //
+  fixed64 orderId = 2;        //0：不带客单信息进入；  >=0表示： 通过客单信息， 从客单查询界面进入， 查询院校信息
+
+    int32 pici = 3; //批次: 1: 本科A,2:本科B, 3: 提前批本A, 4:提前批本B
+    repeated string  province = 4;//省份
+    repeated string schoolType = 5;//院校类型： 综合, 理工、综合、师范、医药
+    int32 is985 = 6; //1:选择985  0： 未选 -1:全部
+    int32 is211 = 7; //1:选择211  0： 未选
+    int32 is1stcls = 8; //1:选择双一流 0： 未选
+    repeated string shoolNames = 9; //搜索学校名
+    repeated string majorNames =10;//搜索专业名
+
+    int32 minScore = 11;//位次区间 最低位次
+    int32 maxScore = 12;//位次区间 最高位次
+
+    repeated string majorNames2 =13;//搜索2级专业名
+    string year = 14;// 查询年份
+
+    int32 isZhongWai = 15;          //是否中外合作;  1:选择  0： 未选
+    int32 isBenSuo = 16;          //是否本硕; 1:选择  0： 未选
+}
+
+message S_GetTemplateInfoDetailByFilterForUse_6107 {
+   MsgResult result = 1; //返回消息体
+  TemplateInfo templateInfo = 2;
+  TemplateDetailInfo detail = 3;// 专业组信息
+}
+
+
+//另存模板信息,
+message C_SaveAsTemplateInfo_6108{
+  fixed64 templateId = 1;        //当前操作的模板id
+  string templateName = 2;// 模板名
+  TemplateDetailInfo detail = 3;// 专业组信息
+  int64  teacherId = 4;  //当前登录老师的 UsersRes.id
+
+  repeated Major1stClsInfo favoredMajorCls1List =5; //模板相关的 专业信息list,
+}
+
+message S_SaveAsTemplateInfo_6109 {
+   MsgResult result = 1; //返回消息体
+   TemplateInfo templateInfo = 2; //模板信息
+}
+
+
+//-----------------------------------------------------------------------------------------
+//后台api
+
+//后台登录
+message C_AdminUserLogin_10000 {
+  string userId = 1;  //用户名 admin
+  string password = 2;
+}
+
+message S_AdminUserLogin_10001 {
+   MsgResult result = 1; //返回消息体
+}
+
+
+//-----------------------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------------------
+//后台数据结构
+//个人信息 返回对象
+message UsersQueryRes {
+   UsersRes userRes = 1;
+}

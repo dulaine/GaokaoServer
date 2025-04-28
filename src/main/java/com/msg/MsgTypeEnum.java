@@ -1,0 +1,108 @@
+package com.msg;
+
+public enum MsgTypeEnum {
+   C_LoginResByPhone_1000("", 1000), 
+   S_LoginResByPhone_1001("", 1001), 
+   C_LoginResByToken_1010("", 1010), 
+   S_LoginResByToken_1011("", 1011), 
+   C_GetSmsCode_1006("", 1006), 
+   S_GetSmsCode_1007("", 1007), 
+   C_GetMailVerifyCode_1008("", 1008), 
+   S_GetMailVerifyCode_1009("", 1009), 
+   C_GetTeacherInfoByPage_2000("", 2000), 
+   S_GetTeacherInfoByPage_2001("", 2001), 
+   C_UpdateTeacherInfo_2002("", 2002), 
+   S_UpdateTeacherInfo_2003("", 2003), 
+   C_GetAllTeacherInfo_2004("", 2004), 
+   S_GetAllTeacherInfo_2005("", 2005), 
+   C_ChangeExamYear_2006("", 2006), 
+   S_ChangeExamYear_2007("", 2007), 
+   C_GetExamYear_2008("", 2008), 
+   S_GetExamYear_2009("", 2009), 
+   C_GetOrderInfoByPage_3000("", 3000), 
+   S_GetOrderInfoByPage_3001("", 3001), 
+   C_CreateOrderInfo_3002("", 3002), 
+   S_CreateOrderInfo_3003("", 3003), 
+   C_UpdateOrderInfo_3004("", 3004), 
+   S_UpdateOrderInfo_3005("", 3005), 
+   C_UpdateClientInfo_3006("", 3006), 
+   S_UpdateClientInfo_3007("", 3007), 
+   C_GetClientInfo_3008("", 3008), 
+   S_GetClientInfo_3009("", 3009), 
+   C_AssignOrderToTeacher_3010("", 3010), 
+   S_AssignOrderToTeacher_3011("", 3011), 
+   C_DeleteOrderInfo_3012("", 3012), 
+   S_DeleteOrderInfo_3013("", 3013), 
+   C_RecoverOrderInfo_3014("", 3014), 
+   S_RecoverOrderInfo_3015("", 3015), 
+   C_GetMajorCls_3100("", 3100), 
+   S_GetMajorCls_3101("", 3101), 
+   C_GetRankByScore_3102("", 3102), 
+   S_GetRankByScore_3103("", 3103), 
+   C_GetPhysicLimitation_3104("", 3104), 
+   S_GetPhysicLimitation_3105("", 3105), 
+   C_GetUniMajorInfoByPage_4000("", 4000), 
+   S_GetUniMajorInfoByPage_4001("", 4001), 
+   C_UpdateMajorPreference_4002("", 4002), 
+   S_UpdateMajorPreference_4003("", 4003), 
+   C_GetAllMajorsOfUni_4004("", 4004), 
+   S_GetAllMajorsOfUni_4005("", 4005), 
+   C_GetMajorsOfUniByIcon_4006("", 4006), 
+   S_GetMajorsOfUniByIcon_4007("", 4007), 
+   C_GetFormInfoByPage_5000("", 5000), 
+   S_GetFormInfoByPage_5001("", 5001), 
+   C_CreateFormInfo_5002("", 5002), 
+   S_CreateFormInfo_5003("", 5003), 
+   C_UpdateFormInfo_5004("", 5004), 
+   S_UpdateFormInfo_5005("", 5005), 
+   C_GetFormInfoDetail_5006("", 5006), 
+   S_GetFormInfoDetail_5007("", 5007), 
+   C_DeleteFormInfo_5008("", 5008), 
+   S_DeleteFormInfo_5009("", 5009), 
+   C_LockFormInfo_5010("", 5010), 
+   S_LockFormInfo_5011("", 5011), 
+   C_GetFormInfoByPici_5012("", 5012), 
+   S_GetFormInfoByPici_5013("", 5013), 
+   C_RecoverFormInfo_5014("", 5014), 
+   S_RecoverFormInfo_5015("", 5015), 
+   C_SaveAsFormInfo_5016("", 5016), 
+   S_SaveAsFormInfo_5017("", 5017), 
+   C_GetTemplateInfoByPage_6000("", 6000), 
+   S_GetTemplateInfoByPage_6001("", 6001), 
+   C_GetTemplateInfoDetail_6002("", 6002), 
+   S_GetTemplateInfoDetail_6003("", 6003), 
+   C_GetTemplateInfoDetailByFilter_6004("", 6004), 
+   S_GetTemplateInfoDetailByFilter_6005("", 6005), 
+   C_AssignTemplateToTeacher_6010("", 6010), 
+   S_AssignTemplateToTeacher_6011("", 6011), 
+   C_ChangeTemplateStatus_6012("", 6012), 
+   S_ChangeTemplateStatus_6013("", 6013), 
+   C_CreateTemplateInfo_6100("", 6100), 
+   S_CreateTemplateInfo_6101("", 6101), 
+   C_UpdateTemplateInfo_6102("", 6102), 
+   S_UpdateTemplateInfo_6103("", 6103), 
+   C_DeleteTemplateInfo_6104("", 6104), 
+   S_DeleteTemplateInfo_6105("", 6105), 
+   C_GetTemplateInfoDetailByFilterForUse_6106("", 6106), 
+   S_GetTemplateInfoDetailByFilterForUse_6107("", 6107), 
+   C_SaveAsTemplateInfo_6108("", 6108), 
+   S_SaveAsTemplateInfo_6109("", 6109), 
+   C_AdminUserLogin_10000("", 10000), 
+   S_AdminUserLogin_10001("", 10001), 
+;
+    private String msgDes;
+    private int msgId;
+
+    public String getMsgDes() {
+        return msgDes;
+    }
+
+    public int getMsgId() {
+        return msgId;
+    }
+
+    MsgTypeEnum(String msg, int msgId) {
+        this.msgDes = msg;
+        this.msgId = msgId;
+    }
+}

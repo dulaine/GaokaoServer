@@ -1,0 +1,746 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.msg";
+option java_outer_classname = "YZPM";
+
+//用户个人信息数据结构
+
+//登录-使用用户名密码登录--请求
+message C_LoginResByUser_1000 {
+   string tel = 1;  //手机号
+   string yzm = 2;  //验证码
+}
+
+//登录-使用用户名密码登录--响应
+message S_LoginResByUser_1001 {
+  UsersRes usersRes = 1;
+}
+
+//登录-使用手机登录--请求
+message C_LoginResByPhone_1002 {
+   string tel = 1;  //手机号
+   string pwd = 2;  //密码
+}
+
+//登录-使用手机登录--响应
+message S_LoginResByPhone_1003 {
+  UsersRes usersRes = 1;
+  RetObj retObj = 2;
+}
+
+//修改密码--请求
+message C_ChangePwd_1004 {
+   string tel = 1;  //手机号
+   string yzm = 2;  //验证码
+   string newPwd = 3;  //新密码
+}
+
+//修改密码--响应
+message S_ChangePwd_1005 {
+  RetObj retObj = 1;
+}
+
+//完善个人信息--请求
+message C_SaveUserInfo_1006 {
+   fixed64 id = 1;  //用户id
+   string ssp = 5;  //学籍所在地  以竖线分割 省份|地级市|行政区
+   string examYear =6; //高考年份
+   string examPreScore =7;  //高考预估分数
+   string role = 8 ;//角色
+   string examSubject =9;  //考试科目  以竖线分割
+
+}
+
+//完善个人信息--响应
+message S_SaveUserInfo_1007 {
+   RetObj retObj = 1; //返回消息体
+   UsersRes usersRes = 2; //返回个人信息，便于前端保存到local
+}
+
+//个人中心功能----------------
+
+
+//院校收藏信息列表_请求
+message C_GetSchoolStoreUpResList_1008 {
+   fixed64 userID = 1; //用户id
+}
+
+//院校收藏信息列表--响应
+message S_GetSchoolStoreUpResList_1009 {
+  //院校收藏信息
+  repeated SchoolStoreUpRes schoolStoreUpResList = 1;
+}
+
+//专业收藏信息列表_请求
+message C_GetDisciplineStoreUpResList_1020 {
+   fixed64 userID = 1; //用户id
+}
+
+//专业收藏信息列表_响应
+message S_GetDisciplineStoreUpResList_1021 {
+  //专业收藏信息
+  repeated DisciplineStoreUpRes disciplineStoreUpResLis = 1;
+}
+
+//院校对比列表_请求
+message C_GetSchoolContrastResList_1022 {
+   fixed64 userID = 1; //用户id
+}
+
+//院校对比列表--响应
+message S_GetSchoolContrastResList_1023 {
+  //院校对比信息
+  repeated SchoolContrastRes schoolContrastResList = 1;
+}
+
+//专业对比列表_请求
+message C_GetDisciplineContrastResList_1024 {
+   fixed64 userID = 1; //用户id
+}
+
+//专业对比列表_响应
+message S_GetDisciplineContrastResList_1025 {
+  //专业对比信息
+  repeated DisciplineContrastRes disciplineContrastRes = 1;
+}
+
+//高考估分--开始---
+//高考估分--请求
+message C_SaveAssessment_1026 {
+   fixed64 id = 1;  //用户id
+   string examPreScore =7;  //高考预估分数
+}
+
+//高考估分--响应
+message S_SaveAssessment_1027 {
+   RetObj retObj =7;  //返回消息对象
+}
+//高考估分--结束---
+
+//修改个人高考科目--开始---
+//修改个人高考科目--请求
+message C_SaveUserInfo_1028 {
+   fixed64 id = 1;  //用户id
+   string examSubject =7;  //高考科目 考试科目  以竖线分割
+}
+//修改个人高考科目--返回
+message S_SaveUserInfo_1029 {
+   RetObj retObj =7;  //返回消息对象
+}
+//修改个人高考科目--结束---
+
+
+
+//返回对象消息体
+message RetObj{
+   fixed64 resCode = 1;    //返回结果码 1:处理正常  0:处理有误
+   fixed64 resInfo = 2;    //返回结果消息文本提示（用于正确或错误提示）
+}
+
+
+//个人信息 返回对象
+message UsersRes {
+   fixed64 id = 1;          //会员id
+   string tel = 2;        //会员手机号
+   string picPath1 = 3;   //会员头像
+   string pwd = 4;        //密码
+   string ssp = 5;        //学籍所在地  以竖线分割 省份|地级市|行政区
+   string examYear =6;    //高考年份
+   string examPreScore =7;//高考预估分数
+   string role = 8 ;      //角色
+   string examSubject =9; //考试科目  以竖线分割
+}
+
+
+//对比院校信息
+message SchoolContrastRes{
+  fixed64  schoolId = 1;    //学校id
+  string schoolName = 2;  //学校名称
+  string addTime = 3;     //创建时间 日期时间
+  string userID = 4;      //用户id
+}
+
+//对比专业信息
+message DisciplineContrastRes{
+  fixed64  zylId = 1;       //专业id
+  string zyName = 2;      //专业名称
+  string addTime = 3;     //创建时间 日期时间
+  string userID = 4;      //所属用户id
+}
+
+
+//院校收藏信息
+message SchoolStoreUpRes{
+  fixed64 id = 1;           //院校收藏id
+  string schoolName = 2;  //学校名称
+  string addTime = 3;     //创建时间 日期时间
+  string userID = 4;      //所属用户id
+}
+
+//专业收藏信息
+message DisciplineStoreUpRes{
+  fixed64 id = 1;              //院校收藏id
+  string disciplineName = 2; //学校名称
+  string addTime = 3;        //创建时间 日期时间
+  string userID = 4;         //所属用户id
+}
+
+
+
+//学校主页-学校基本信息--请求
+//学校主页 -学校简介 -学校风光
+message C_GetSchoolInfoById_2000 {
+   fixed64 schoolId = 1;  //学校id
+}
+
+//学校主页-学校基本信息--响应
+message S_GetSchoolInfoById_2001 {
+  SchoolInfo schoolInfo = 1; //学校对象
+}
+
+
+//学校主页-学校录取信息--请求   还用于主页的录取信息和子页签的请求
+//schoolHome.vue/ schoolScore.vue
+message C_GetSchoolAdmitInfo_2002 {
+   fixed64 schoolId = 1;          //学校id 不可为空
+   string year = 2;       //招生年份
+   string province = 3;   //所属省份 可为空
+}
+
+//学校主页-学校录取信息--响应   还用于主页的录取信息和子页签的请求
+message S_GetSchoolAdmitInfo_2003 {
+  repeated SchoolAdmitInfo schoolAdmitInfo = 1; //学校录取信息列表
+}
+
+//学校主页-专业录取信息列表--请求   还用于主页的录取信息和子页签的请求
+//schoolHome.vue/ schoolScore.vue
+message C_GetZyAdmitInfo_2004 {
+   fixed64 schoolId = 1;          //学校id 不可为空
+   string year = 2;       //招生年份
+   string province = 3;   //所属省份 可为空
+   string kelei = 4;      //科类 文科、理科
+}
+
+//学校主页-专业录取信息列表--响应   还用于主页的录取信息和子页签的请求
+message S_GetZyAdmitInfo_2005 {
+  repeated ZyAdmitInfo zyAdmitInfo = 1; //专业录取信息列表
+}
+
+//学校主页-学校专业招生计划列表--请求   还用于主页的录取信息和子页签的请求
+//schoolHome.vue/schoolZSJH.vue
+message C_GetPlanRecruit_2006 {
+   fixed64  schoolId = 1;          //学校id 不可为空
+   string year = 2;       //招生年份
+   string province = 3;   //所属省份 可为空
+   string kelei = 4;      //科类 文科、理科
+   string pici = 5;       //批次 体育高职批 本科提前批 艺术类高职批
+}
+
+//学校主页-学校专业招生计划列表--响应   还用于主页的录取信息和子页签的请求
+message S_GetPlanRecruit_2007 {
+  repeated PlanRecruit planRecruit = 1; //招生计划信息列表
+}
+
+//选科要求列表--请求   还用于主页的录取信息和子页签的请求
+//schoolXKYQ.vue
+message C_GetXkyqInfo_2008 {
+   fixed64  schoolId = 1;          //学校id 不可为空
+}
+
+//选科要求列表--响应   还用于主页的录取信息和子页签的请求
+message S_GetXkyqInfo_2009 {
+  repeated XkyqInfo xkyqInfo = 1; //选科要求列表
+}
+
+
+//院系设置列表
+//schoolYXSZ.vue
+message C_GetYxszInfo_2010 {
+   fixed64  schoolId = 1;          //学校id 不可为空
+}
+
+//院系设置列表列表--响应   还用于主页的录取信息和子页签的请求
+message S_GetYxszInfo_2011 {
+  repeated YxszInfo yxszInfo = 1; //院系设置列表
+}
+
+//
+//招生简章列表--请求
+//schoolZSJZ.vue
+message C_GetZsjzInfo_2012 {
+   fixed64  schoolId = 1;          //学校id 不可为空
+}
+
+//招生简章列表列表--响应   还用于主页的录取信息和子页签的请求
+message S_GetZsjzInfo_2013 {
+  repeated ZsjzInfo zsjzInfo = 1; //招生简章列表
+}
+
+
+
+
+//学校信息
+message SchoolInfo {
+   fixed64  id = 1;          //学校id
+   string tel = 2;        //学校电话
+   string name = 3;       //学校名称
+   string logoPath = 4;   //logo
+   string type = 5;        //高校类型
+   string level = 6;        //学历层次
+   string province = 7;     //所属地区  以竖线分割 省份|地级市|行政区
+   string email = 8;        //电子邮箱
+   string schoolInfo =9;    //学校简介
+   string schoolMeddia =10;  //图片/视频
+   string fengguang =11;   //学校风光
+}
+
+
+
+//专业信息
+message ZyInfo {
+   fixed64  id = 1;         //专业id
+   string name = 2;       //专业名称
+   string type = 3;       //学科门类
+   string level = 4;      //学历层次
+   string yearLimit = 5;  //修习年限
+   string studyLev = 6;   //授予学位
+   string requirement = 7;      //选科要求 多学科以竖线分割
+   string zyCode = 8;     // 专业代码
+}
+
+
+//学校录取信息
+message SchoolAdmitInfo {
+   fixed64  id = 1;           //数据ID
+   fixed64  schoolId = 2;     // 学校id
+   string zsnf = 3;         //招生年份
+   string kelei = 4;        //科类
+   string yylb = 5;         //院校类别
+   string lqpc = 6;         //录取批次
+   string higScore = 7;     //最高分
+   string AvgScore = 8;     //平均分
+   string lowScore = 9;     //最低分
+   string lowSeat =10;      //最低位次
+   string planCount =11;    //计划人数
+
+}
+
+
+
+//专业录取信息
+message ZyAdmitInfo {
+   fixed64  id = 1;           //数据ID
+   fixed64  zyId = 2;         // 专业id
+   string zyName = 3;       // 专业名称
+   string zsnf = 4;         //招生年份
+   string kelei = 5;        //科类
+   string lqpc = 6;         //录取批次
+   string higScore = 7;     //最高分
+   string AvgScore = 8;     //平均分
+   string lowScore = 9;     //最低分
+   string lowSeat =10;      //最低位次
+   string diff =11;         //线差
+   string planCount =12;    //计划人数
+   fixed64  schoolId = 13;     // 学校id
+}
+
+//学校专业招生计划
+message PlanRecruit {
+   fixed64  id = 1;           //数据ID
+   fixed64  schoolId = 2;     // 学校id
+   fixed64  zyId = 3;         // 专业id
+   string zcode = 4;       // 专业代码
+   string zyName = 5;       // 专业名称
+   string planCount = 6;    //计划人数
+   string zsnf = 7;         //招生年份
+   string pici =8 ;         //批次
+}
+
+//学校主页-选科要求
+message XkyqInfo {
+   fixed64  id = 1;           // 数据ID
+   fixed64  schoolId = 2;     // 学校id
+   fixed64  zyId = 3;         // 专业id
+   string zyName = 4;       // 专业名称
+   string planCount = 5;    // 一级学科
+   string zsnf = 6;         // 所属院系
+   string pici = 7 ;         // 选科要求
+}
+
+//学校主页-院系设置
+message YxszInfo {
+   fixed64  xyName = 1;       // 学院名称
+   repeated XkyqInfo xkyqInfo = 2;
+}
+
+
+
+//学校主页-招生简章
+message ZsjzInfo {
+   fixed64  id = 1;           // 数据ID
+   fixed64  schoolId = 2;     // 学校id
+   fixed64  title = 3;        // 招生简章标题
+   string publishDate = 4;  //  发布日期
+   string content = 5;      // 招生简章内容
+}
+
+
+//高校数据-智能推荐列表--请求
+message C_GetZntjInfoList_3000 {
+
+  //查询条件
+  string  kelei = 1;     //课类  文科、理科
+  int32 score    = 2;  //分数
+  int32 weishu   = 3;  //位数
+  string province = 4;  //省份
+  string type     = 5;  //类型  理工、综合、师范、医药。。。
+  string pici     = 6;  //批次  本科提前批，本科批，艺术本科批。。
+  string cengci   = 7;  //层次  985，211 双一流
+  int32 startScore=8;  //起始分数
+  int32 endScore = 9;  //结束分数
+  int32 page     =10;  //查询页码
+  int32 limit     =11;  //每页显示条数
+  //排序条件
+  string sortFile =12; //排序条件
+
+}
+
+//校数据-智能推荐列表--响应
+message S_GetZntjInfoList_3001 {
+  repeated ZntjInfo zntjInfo = 1; //智能推荐列表
+  PagingInfo pagingInfo = 2;//分页对象
+
+}
+//--------------------------------
+
+//高校数据-找学校列表--请求
+message C_GetSeachSchoolList_3002 {
+
+  //查询条件
+  string  schoolName = 1;  //学校名称
+  string province = 2;  //省份
+  string type     = 3;  //类型  理工、综合、师范、医药。。。
+  string pici     = 4;  //批次  本科提前批，本科批，艺术本科批。。
+  string cengci   = 5;  //层次  985，211
+  int64 startScore=6;  //起始分数
+  int64 endScore = 7;  //结束分数
+  int32 page     =8;  //查询页码
+  int32 limit     =9;  //每页显示条数
+  //排序条件
+  string sortFile =10; //排序条件
+
+}
+
+//校数据-找学校列表--响应
+message S_GetSeachSchoolList_3003{
+  repeated SeachSchool seachSchool = 1; //找学校列表
+  PagingInfo pagingInfo = 2;//分页对象
+}
+//--------------------------------
+
+
+//高校数据-分数线列表--请求
+message C_GetSeachScoreList_3004 {
+  //查询条件
+  string  schoolName = 1;  //学校名称
+  string province = 2;  //省份
+  string type     = 3;  //类型  理工、综合、师范、医药。。。
+  string pici     = 4;  //批次  本科提前批，本科批，艺术本科批。。
+  string cengci   = 5;  //层次  985，211
+  int64 startScore=6;  //起始分数
+  int64 endScore = 7;  //结束分数
+  int32 page     =8;  //查询页码
+  int32 limit     =9;  //每页显示条数
+  //排序条件
+  string sortFile =10; //排序条件
+}
+//高校数据-分数线列表--响应
+message S_GetSeachScoreList_3005 {
+  repeated SeachScore seachScore = 1; //找学校列表
+  PagingInfo pagingInfo = 2;//分页对象
+}
+//--------------------------------
+
+
+//高校数据-省控线列表--请求
+message C_GetSeachSKYXList_3006 {
+  //查询条件
+  string province = 1;  //省份
+  string kelei     = 2;  //科目  文科、理科、新高考
+  string years     = 3;  //年份
+  int32 page     =4;  //查询页码
+  int32 limit     =5;  //每页显示条数
+}
+
+//高校数据-省控线列表--响应
+message S_GetSeachSKYXList_3007 {
+  repeated SeachSKYX seachSKYX = 1; //省控线列表
+  PagingInfo pagingInfo = 2;//分页对象
+}
+//--------------------------------
+
+//高校数据-院校排名列表--请求
+message C_GetSeachYYPMList_3008 {
+ //查询条件
+  string  name = 1;    //学校名称
+  string xueli = 2;     //学历 本科、专科
+  string type     = 3;  //类型  理工、综合、师范、医药。。。
+  string cengci   = 4;  //层次  985，211
+  int64 startScore=5;  //起始分数
+  int64 endScore = 6;  //结束分数
+  int32 page     = 7;  //查询页码
+    int32 limit     =8;  //每页显示条数
+  string diqu = 9;//地区省份
+  //排序条件
+  string sortFile =10; //排序条件
+}
+
+//高校数据-院校排名列表--响应
+message S_GetSeachYYPMList_3009 {
+  repeated SeachYYPM SeachYYPM = 1; //院校排名列表
+  PagingInfo pagingInfo = 2;//分页对象
+}
+//--------------------------------
+
+//高校数据-院校排名列表--请求
+
+
+//高校数据-找专业-专业大全-列表--请求
+message C_GetZydqList_3010{
+  //查询条件
+  string  zYName = 1;    //专业名称
+  string pici      = 2;    //学历 本科、专科
+  string type       = 3;    //类型  化学
+  int32 schoolIsAll  = 4;  //0:符合选科要求的院校 / 1:全部院校
+    int32 page     = 5;  //查询页码
+    int32 limit     =6;  //每页显示条数
+}
+
+//高校数据-找专业-专业大全-列表--响应
+message S_GetZydqList_3011{
+  repeated Xkml xkml = 1; //院校排名列表
+  PagingInfo pagingInfo = 2;//分页对象
+}
+
+//高校数据-找专业-根据分数选专业-列表--请求
+message C_GetSeachFSXZYList_3012{
+ //查询条件
+  string  kelei    = 1;       //科类 理科、文科
+  string  zyName   = 2;  //专业名称
+  string province = 3;  //地区省份
+  string type     = 4;  //专业大类 哲学 经济学。。。
+
+  //专业筛选条件
+  string pici   = 5;     // 本科提前批，本科批，艺术本科批。。
+  string xueli = 6;   //学历 本科 专科
+  string kemu    = 7;       //高考科目 语文、数学
+  int32 schoolIsAll  = 8;//0:符合选科要求的院校 / 1:全部院校
+
+  int32 startScore =9;  //起始分数
+  int32 endScore   = 10;  //结束分数
+  int32 page     = 11;  //查询页码
+  int32 limit     =12;  //每页显示条数
+  string sortFile =13; //排序条件
+}
+
+//高校数据-找专业-根据分数选专业-列表--响应
+message S_GetSeachFSXZYList_3013{
+
+  repeated FSXZY fSXZY = 1; //根据分数选专业列表
+
+  PagingInfo pagingInfo = 2;//分页对象
+}
+//-------------------
+
+//高校数据-找专业-根据专业找大学列表--请求
+message C_GetZyzdxList_3014{
+  //查询条件
+  string zyName = 1;  //专业名称
+  string province = 2;  //地区省份
+  string type     = 3;  //专业大类 哲学 经济学。。。
+
+  //专业筛选条件
+  string xueli   = 4;     //学历 本科 专科
+  string pici   = 5;     // 本科提前批，本科批，艺术本科批。。
+  string kemu   = 6;      //高考科目 语文、数学
+  int32 schoolIsAll  = 7;//0:符合选科要求的院校 / 1:全部院校
+
+  int32 startScore=8;  //起始分数
+  int32 endScore = 9;  //结束分数
+  int32 page     =10;  //查询页码
+  int32 limit     =12;  //每页显示条数
+  string sortFile =13; //排序条件
+}
+
+//高校数据-找专业--根据大学找分数列表--响应
+message S_GetZyzdxList_3015{
+
+  repeated Zyzdx zyzdx = 1; //根据分数选专业列表
+
+  PagingInfo pagingInfo = 9;//分页对象
+
+}
+
+
+
+
+//智能推荐返回实体
+message ZntjInfo {
+   fixed64  id   = 1;          //学校id
+   //  SchoolInfo schoolInfo =2; //学校属性  TODO 一级菜单返回内容中去掉二级相关内容
+   string logoPath = 2;   //logo
+   string name = 3;       //学校名称
+   string lqgl = 4;          //录取概率
+   string lqpc = 5;          //录取批次
+   string tdx  = 6;          //最近一年提档线， 以竖线分割  分数|名次
+   string rmzy = 7;          //热门专业
+   string xxpm = 8;          //学校排名 以竖线分割  总排名|热度
+   //PagingInfo pagingInfo = 9;//分页对象
+   string type = 9;        //高校类型
+   string level = 10;        //学历层  985 211 双一流
+   //int32 int32 score   // 提档成绩 TODO  数据库使用
+   //String  kelei         ////课类  文科、理科 建数据库用
+   //  int32 weishu   = 3;  //位数 建数据库用
+//  string province = 4;  //省份 建数据库用
+}
+message PagingInfo {
+   fixed64  rowcount = 1;    //记录总数
+   fixed64  pageCount = 2;   //总页数
+   fixed64  pageNo = 3;     //当前页码
+   fixed64  pageSize =4;     //每页显示条数
+   fixed64  startLimt =5;     //起始行
+
+}
+
+
+
+//找学校返回实体
+message SeachSchool {
+   fixed64  id   = 1;          //学校id
+   //SchoolInfo schoolInfo =2; //学校属性
+   string name = 2;       //学校名称
+   string logoPath = 3;   //logo
+   //学历层次
+   string lqgl = 4;          //录取概率
+   string lqpc = 5;          //录取批次
+   string tdx  = 6;          //最近一年提档线， 以竖线分割  分数|名次
+   string rmzy = 7;          //热门专业 以竖线分隔 格式：专业1id!专业1|专业2id!专业2|专业3id!专业3
+   string type = 8;        //高校类型
+   string level = 9;        //学历层
+   //int32 int32 score   // 提档成绩 TODO  数据库使用
+   //  string diqu = 4;  //省份 建数据库用
+}
+
+
+//分数线返回实体
+message SeachScore {
+   fixed64  id   = 1;           //数据id
+     //SchoolInfo schoolInfo =2; //学校属性 TODO 去掉二级界面内容
+      string name = 2;       //学校名称
+      string logoPath = 3;   //logo
+      string type = 4;        //高校类型
+      string level = 5;        //学历层
+   string stFsx1   = 6;       //近一年录取分数线 以竖线分隔 最高|最低|位次
+   string ndFsx2   = 7;       //近二年录取分数线  以竖线分隔 最高|最低|位次
+   string rdFsx3 = 8;       //近三年录取分数线  以竖线分隔 最高|最低|位次
+   //int32 zdScroe        //最低成绩 TODO  建数据库用
+      //string yjXK             //一级学科 农林牧渔 TODO  建数据库用
+      //string cenci            //层次  TODO  建数据库用
+       // string pici            //批次 TODO  建数据库用
+	   //  string diqu = 4;  //省份 建数据库用
+	   
+}
+
+//省控线-返回实体
+message SeachSKYX {
+  string lqyears    = 1;          //录取年份
+  string province   = 2;          //省份
+  string kelei      = 3;          //科目
+  string pici       = 4;          //批次
+  int64 zdScroe = 5;          //分数线
+
+}
+
+
+//院校排名-返回实体
+message SeachYYPM {
+   fixed64  id   = 1;          //数据id
+        //SchoolInfo schoolInfo =2; //学校属性 TODO 去掉二级界面内容
+         string name = 2;       //学校名称
+         string logoPath = 3;   //logo
+         string type = 4;        //高校类型
+         string level = 5;        //学历层
+   string tlgxSort   = 6;      //同类高校排名
+   string provinceSort = 7;      //省内排名
+   string qsSort = 8;      //QS排名
+   string wslSort = 9;      //武书连排名
+   string xyhSort = 10;      //校友会排名
+   string hot = 11;      //热度排名
+    string tdx  = 12;          //最近一年提档线， 以竖线分割  分数|名次 //近一年录取分数线 以竖线分隔 最高|位次   TODO 没有最低分数位次
+	string diqu = 13; 	//地区
+ //int32 int32 score   // 提档成绩 TODO  数据库使用
+ //string pici // 数据库使用 本科提前批，本科批，艺术本科批。。
+}
+
+//学科门类
+message Xkml {
+   fixed64  id   = 1;          //学科门类id
+   string XKmlName = 2;      //学科门类名称
+   repeated Yjxk yjxk =3;     //一级学科对象List
+
+}
+
+//一级学科
+message Yjxk {
+  fixed64  id   = 1;            //一级学科id
+  string yjxkName = 2;        //一级学科名称
+  repeated ZyInfo zyInfo =3;  //专业列表
+  repeated Xkyq xkyq = 4;     //选科要求
+}
+
+//选科要求
+message Xkyq {
+  fixed64  id   = 1;      //一级学科id
+  string xkyqName = 2;  //选科要求名称
+}
+
+
+//分数选专业-返回实体
+message FSXZY {
+   fixed64  id        = 1;   //数据id
+   //ZyInfo zyInfo    = 2;   //专业对象
+   string  zyName   = 2;  //专业名称
+   string  zyTeSe   = 3;  //A+国家特色
+   string zyLqgl    = 4;   //专业录取概率
+   string lqpc      = 5;   //录取批次
+   string province  = 6;   //省份地区
+   string xkyq      = 7;      //选科要求 物理+化学
+   string stYearLine1  = 8;   //近一年专业录取线
+//string  kelei    = 1;       //科类 理科、文科
+  //string type     = 4;  ////专业大类 哲学 经济学。。。
+  // string pici   = 5;     //学历 本科 专科
+   //fixed64 zdScroe        //最低成绩 TODO  建数据库用
+   //string kemu    = 6;      //选课 语文、数学
+}
+
+//专业选大学-返回实体
+message Zyzdx {
+   fixed64  id        = 1;     //数据id
+   //SchoolInfo schoolInfo =2; //学校属性 TODO 去掉二级界面内容
+    string name = 2;       //学校名称
+    string logoPath = 3;   //logo
+    string type = 4;        //专业大类 哲学 经济学。。。
+    string level = 5;        //学历层
+   string stYearLine1  = 6;  //近一年专业录取线
+   string zyLqgl    = 7;     //专业录取概率
+   string zyName    = 8;     //专业名称
+   string zyLev     = 9;     //专业级别
+   fixed64  zyId         = 10;     //专业ID
+   string xkyq      = 11;     //选科要求
+   //fixed64 zdScroe        //最低成绩 TODO  建数据库用
+//string kemu   = 6;      //高考科目 语文、数学
+   //string xueli            //学历 本科专科 TODO  建数据库用
+   // string diqu            //地区 TODO  建数据库用
+    // string pici            //批次 TODO  建数据库用
+}

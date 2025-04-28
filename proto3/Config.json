@@ -1,0 +1,11 @@
+{
+  "ProjectPath" : "../",
+  "ProtoFilePath" : "proto3\\",
+  "ProtoFileName" : "yzpm",
+  "MessageHandlerOutPutPath": "src\\main\\java\\com\\baizhou\\http\\handler\\requesthandlers\\protohandler\\request\\",
+  "MessageEnumOutPutPath": "src\\main\\java\\com\\msg\\",
+  "MessageHandlerFactoryOutPutPath": "src\\main\\java\\com\\baizhou\\http\\handler\\requesthandlers\\protohandler\\",
+  "DefaultOutPut": "./Output/",
+  "ForceOverWrite": false,
+  "Platform" : "2"
+}
